@@ -19,8 +19,9 @@
   - [部署机器人](#部署机器人)
   - [V4BOT用户部署user.py](#v4bot用户部署userpy)
   - [青龙用户部署user.py](#青龙用户部署userpy)
+- [前瞻计划](#前瞻计划)
 # 仓库目录说明
-```
+```text
 JD_Diy/               # JD_Diy 仓库
   |-- backup            # 移除的旧文件
   |-- beta              # 测试版机器人
@@ -56,40 +57,45 @@ JD_Diy/               # JD_Diy 仓库
 ### 可拓展功能
 - [x] 发送 `/upbot` 升级机器人
 - [x] 发送 `/checkcookie` 检测过期情况
-- [x] 发送`/export` 修改环境变量
+- [x] 发送 `/export` 修改环境变量
+- [x] 发送 `/blockcookie` 进行屏蔽操作（仅 V4）
 - [x] 下载 `.js` `.py` `.sh` 的 `raw` 文件
 - [x] 添加以 `.git` 结尾的仓库链接可添加仓库
 - [x] 发送 `变量名="变量值"` 的格式消息可快捷添加环境变量
 ### user.py功能
-- [x] 监控布道场，关注店铺有礼
-- [ ] ~~监控我的脚本频道，自动更新最新的脚本~~
+- [x] 监控布道场、动物园频道，关注店铺有礼
+- [x] 监控龙王庙频道，监控并定时执行红包雨
 - [x] 监控组队瓜分ID频道，自动替换环境变量
 - [x] 监控动物园频道，自动下载开卡脚本并选择执行
 ## 使用方法
 ### 部署机器人
 #### 方法一、 在容器中使用命令
-```
+```shell
 rm -rf diybot.sh
 wget https://ghproxy.com/https://raw.githubusercontent.com/chiupam/JD_Diy/master/config/diybot.sh
 bash diybot.sh
 ```
 #### 方法二、 给机器人发消息
-```
+```text
 /cmd rm -rf diybot.sh && wget https://ghproxy.com/https://raw.githubusercontent.com/chiupam/JD_Diy/master/config/diybot.sh && bash diybot.sh
 ```
 ### V4BOT用户部署[user.py](https://github.com/chiupam/JD_Diy/blob/main/jbot/user.py)
-1. 把文件存储在路径 `/jbot/diy/` 下
-2. 进入容器，使用命令 `docker exec -it jd bash`
-3. 先手动停止机器人，输入命令：`pm2 stop jbot`
-4. 为了避免不必要的麻烦，输入命令：`rm -rf user.session`
-5. 手动前台开启机器人，输入命令：`python3 -m jbot`
-6. 输入手机号和 `telegram` 验证码进行登录后按 `Ctrl`+`C` 退出前台运行
-7. 后台挂起机器人，输入命令 `pm2 start jbot` 
-### 青龙用户部署[user.py](https://github.com/chiupam/JD_Diy/blob/main/jbot/user.py)
-1. 把文件存储在路径 `/jbot/diy/` 下
-2. 进入容器，使用命令 `docker exec -it qinglong bash`
-3. 先手动停止机器人，输入命令：`pm2 stop jbot`
-4. 为了避免不必要的麻烦，输入命令：`rm -rf user.session`
-5. 手动前台开启机器人，输入命令：`python3 -m jbot`
-6. 输入手机号和 `telegram` 验证码进行登录后按 `Ctrl`+`C` 退出前台运行
-7. 重启机器人，输入命令 `ql bot`
+1. 进入容器，输入如下命令：`docker exec -it jd bash`
+2. 把 [user.py](https://github.com/chiupam/JD_Diy/blob/main/jbot/user.py) 下载到 `/jbot/diy` 目录下，输入如下命令：`cd /jd/jbot/diy && rm -rf user.py && wget https://raw.githubusercontent.com/chiupam/JD_Diy/master/jbot/user.py && cd /jd/ && pm2 stop jbot && rm -rf user.session && python3 -m jbot`
+3. 输入手机号和 `telegram` 验证码进行登录后按 `Ctrl`+`C` 退出前台运行，不管出现任何情况，都继续执行第4步
+4. 后台挂起机器人，输入如下命令：`pm2 start jbot`
+### 青龙用户部署[user.py](https://github.com/chiupam/JD_Diy/blob/main/jbot/user.py) 
+1. 进入容器，输入如下命令：`docker exec -it qinglong bash`
+2. 把 [user.py](https://github.com/chiupam/JD_Diy/blob/main/jbot/user.py) 下载到 `/jbot/diy` 目录下，输入如下命令：`cd /ql/jbot/diy && rm -rf user.py && wget https://raw.githubusercontent.com/chiupam/JD_Diy/master/jbot/user.py && cd /ql/ && ps -ef | grep "python3 -m jbot" | grep -v grep | awk '{print $1}' | xargs kill -9 2>/dev/null && rm -rf user.session && python3 -m jbot`
+3. 输入手机号和 `telegram` 验证码进行登录后按 `Ctrl`+`C` 退出前台运行，不管出现任何情况，都继续执行第4步
+4. 后台挂起机器人，输入命令：`nohup python3 -m jbot > /ql/log/bot/bot.log 2>&1 &`
+### 前瞻计划
+测试版机器人的部署方法，功能不稳定，不建议尝试~
+```shell
+rm -rf diybot_beta.sh
+wget https://ghproxy.com/https://raw.githubusercontent.com/chiupam/JD_Diy/master/config/diybot_beta.sh
+bash diybot_beta.sh
+```
+```text
+/cmd rm -rf diybot_beta.sh && wget https://raw.githubusercontent.com/chiupam/JD_Diy/master/config/diybot_beta.sh && bash diybot_beta.sh
+```

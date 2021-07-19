@@ -1,14 +1,5 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# @Author   : Chiupam
-# @Data     : 2021-06-13
-# @Version  : v 1.0
-# @Updata   :
-# @Future   :
-
-
-from .. import chat_id, jdbot, logger, _JdbotDir
-from ..bot.utils import press_event, V4, QL, split_list, row, backfile, mybot
+from .. import chat_id, jdbot, logger, _JdbotDir, chname, mybot
+from ..bot.utils import press_event, V4, QL, split_list, row, backfile, mybot, cmd
 from ..diy.utils import upuser
 from telethon import events, Button
 from asyncio import exceptions
@@ -49,8 +40,8 @@ async def myupbot(event):
             elif fname == 'all':
                 await jdbot.edit_message(msg, "准备自动升级并重启，请耐心等待")
                 furl = "https://ghproxy.com/https://raw.githubusercontent.com/chiupam/JD_Diy/master/config/diybot.sh"
-                cmdtext = f"rm - f diybot.sh && wget {furl} && bash diybot.sh"
-                os.system(cmdtext)
+                cmdtext = f"rm -f diybot.sh && wget {furl} && bash diybot.sh"
+                await cmd(cmdtext)
                 return
             conv.cancel()
         msg = await jdbot.edit_message(msg, "开始下载文件")
@@ -74,3 +65,5 @@ async def myupbot(event):
         logger.error('something wrong,I\'m sorry\n' + str(e))
 
 
+if chname:
+    jdbot.add_event_handler(myupbot, events.NewMessage(from_users=chat_id, pattern=mybot['命令别名']['cron']))
